@@ -27,7 +27,7 @@ def split_name(full_name):
 def insert_to_company(company):
     # print(company)
     company_name = company["Title"]
-    registered_address = company["NoiDangKyQuanLy_CoQuanTitle"] if company["NoiDangKyQuanLy_CoQuanTitle"] else ''
+    registered_address = company["NoiDangKyQuanLy_CoQuanTitle"]
     company_address = company["DiaChiCongTy"]
     owner_name = company["ChuSoHuu"]
     occupation = company["NganhNgheTitle"]
