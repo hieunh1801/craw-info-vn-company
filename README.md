@@ -4,5 +4,5 @@ https://thongtindoanhnghiep.co/rest-api
 
 ## RUN
 ```cmd
-python app.py
+.start_script.sh
 ```
