@@ -110,7 +110,8 @@ def generate_from_list_city(cities):
 
 if __name__ == "__main__":
     try:
-        print("list 1:", list_city_name1, " - list 2:", list_city_name2)
+        print("list 1:", len(list_city_name1),
+              " - list 2:", len(list_city_name2))
         thread1 = threading.Thread(
             target=generate_from_list_city, args=(list_city_name1,))
         thread2 = threading.Thread(
