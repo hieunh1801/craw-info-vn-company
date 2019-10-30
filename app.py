@@ -15,7 +15,7 @@ def split_name(full_name):
             - "Nguyeenx"        -> ('', '', 'Nguyeenx')
 
     """
-    if full_name is '':
+    if full_name is '' or None:
         return ('', '', '')
     full_name_array = full_name.split(" ")
     lastname = full_name_array.pop(-1)
