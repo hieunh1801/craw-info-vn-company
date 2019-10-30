@@ -43,10 +43,10 @@ def insert_to_company(company):
     query = f"""
     INSERT INTO public.company_info(
             company_name, url, registered_address, company_address, owner_name, occupation, tax_number, city, district, ward, full_name, surname, middlename, lastname)
-    VALUES ( 
+    VALUES (
     $$ '{company_name}'$$,
     $$ '{url}'$$,
-    $$ '{registered_address}'$$, 
+    $$ '{registered_address}'$$,
     $$ '{company_address}'$$,
     $$ '{owner_name}'$$,
     $$ '{occupation}'$$,
@@ -90,16 +90,13 @@ def generate_data_for_one_city(city_name="ha_noi"):
     print("city done: ", city_name)
 
 
-list_city_name1 = ['tien-giang', 'hung-yen', 'ha-noi', 'tp-ho-chi-minh',
-                   'ca-mau', 'dac-lac', 'nam-dinh', 'quang-ninh', 'dak-nong', 'da-nang']
-list_city_name2 = ['hai-duong', 'long-an', 'ben-tre', 'dong-thap', 'vinh-long',
-                   'kien-giang', 'tra-vinh', 'soc-trang', 'bac-ninh', 'thanh-hoa', 'vung-tau']
-list_city_name3 = ['dong-nai', 'binh-duong', 'thai-nguyen', 'thai-binh', 'can-tho',
-                   'nghe-an', 'hue', 'binh-phuoc', 'quang-nam', 'quang-ngai', 'ninh-thuan', 'ninh-binh', 'binh-thuan', 'kon-tum', 'vinh-phuc', ]
-list_city_name4 = ['lao-cai', 'hai-phong', 'an-giang', 'phu-tho', 'tay-ninh',
-                   'khanh-hoa', 'phu-yen', 'hoa-binh', 'tuyen-quang', 'lai-chau', 'hau-giang']
-list_city_name5 = ['lam-dong', 'lang-son', 'ha-nam', 'bac-can', 'binh-dinh',
-                   'cao-bang', 'son-la', 'quang-binh', 'quang-tri', 'gia-lai', 'bac-giang', 'ha-tinh', 'bac-lieu', 'yen-bai', 'dien-bien', 'ha-giang', 'chua-ro']
+list_city_name1 = ['tien-giang', 'hung-yen', 'ha-noi', 'tp-ho-chi-minh', 'ca-mau', 'dac-lac', 'nam-dinh', 'quang-ninh', 'dak-nong', 'da-nang', 'hai-duong', 'long-an', 'ben-tre', 'dong-thap', 'vinh-long',
+                   'kien-giang', 'tra-vinh', 'soc-trang', 'bac-ninh', 'thanh-hoa', 'vung-tau', 'dong-nai', 'binh-duong', 'thai-nguyen', 'thai-binh', 'can-tho', 'nghe-an', 'hue', 'binh-phuoc', 'quang-nam', 'quang-ngai']
+list_city_name2 = ['ninh-thuan', 'lao-cai', 'hai-phong', 'an-giang', 'phu-tho', 'tay-ninh', 'khanh-hoa', 'phu-yen', 'hoa-binh', 'tuyen-quang', 'lai-chau', 'hau-giang', 'lam-dong', 'lang-son', 'ha-nam', 'bac-can',
+                   'binh-dinh', 'cao-bang', 'son-la', 'quang-binh', 'quang-tri', 'gia-lai', 'bac-giang', 'ha-tinh', 'ninh-binh', 'binh-thuan', 'kon-tum', 'vinh-phuc', 'bac-lieu', 'yen-bai', 'dien-bien', 'ha-giang', 'chua-ro']
+list_city_name3 = []
+list_city_name4 = []
+list_city_name5 = []
 
 
 def generate_from_list_city(cities):
@@ -113,6 +110,7 @@ def generate_from_list_city(cities):
 
 if __name__ == "__main__":
     try:
+        print("list 1:", list_city_name1, " - list 2:", list_city_name2)
         thread1 = threading.Thread(
             target=generate_from_list_city, args=(list_city_name1,))
         thread2 = threading.Thread(
@@ -125,8 +123,8 @@ if __name__ == "__main__":
             target=generate_from_list_city, args=(list_city_name5,))
         thread1.start()
         thread2.start()
-        thread3.start()
-        thread4.start()
+        # thread3.start()
+        # thread4.start()
         # thread5.start()
     except:
         print("error")
