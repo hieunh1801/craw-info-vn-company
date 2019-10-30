@@ -1,0 +1,31 @@
+list 1: 29  - list 2: 35
+city name:  tien-giang
+city name:  ben-tre
+Exception in thread Thread-2:
+Traceback (most recent call last):
+  File "C:\Users\hieun\AppData\Local\Programs\Python\Python37-32\lib\threading.py", line 917, in _bootstrap_inner
+    self.run()
+  File "C:\Users\hieun\AppData\Local\Programs\Python\Python37-32\lib\threading.py", line 865, in run
+    self._target(*self._args, **self._kwargs)
+  File "app_v2_2thread.py", line 116, in generate_from_list_city
+    generate_data_for_one_city(city_name=city)
+  File "app_v2_2thread.py", line 83, in generate_data_for_one_city
+    f"""Insert company success: {company["TinhThanhTitle"]} - {count_company} - {company["Title"]}""")
+  File "C:\Users\hieun\AppData\Local\Programs\Python\Python37-32\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u1ebf' in position 25: character maps to <undefined>
+
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "C:\Users\hieun\AppData\Local\Programs\Python\Python37-32\lib\threading.py", line 917, in _bootstrap_inner
+    self.run()
+  File "C:\Users\hieun\AppData\Local\Programs\Python\Python37-32\lib\threading.py", line 865, in run
+    self._target(*self._args, **self._kwargs)
+  File "app_v2_2thread.py", line 116, in generate_from_list_city
+    generate_data_for_one_city(city_name=city)
+  File "app_v2_2thread.py", line 83, in generate_data_for_one_city
+    f"""Insert company success: {company["TinhThanhTitle"]} - {count_company} - {company["Title"]}""")
+  File "C:\Users\hieun\AppData\Local\Programs\Python\Python37-32\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u1ec1' in position 26: character maps to <undefined>
+
