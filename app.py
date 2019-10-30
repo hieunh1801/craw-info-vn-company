@@ -5,6 +5,8 @@ from connection_to_db import execute_query
 
 logging.basicConfig(filename='app.log', filemode='w')
 
+number_of_company = 1
+
 
 def split_name(full_name):
     """
@@ -25,6 +27,7 @@ def split_name(full_name):
 
 
 def insert_to_company(company):
+    global number_of_company
     # print(company)
     company_name = company["Title"]
     registered_address = company["NoiDangKyQuanLy_CoQuanTitle"]
@@ -58,7 +61,8 @@ def insert_to_company(company):
     $$ '{lastname}'$$) ON CONFLICT (tax_number) DO NOTHING;
     """
     execute_query(query)
-    print(f"Insert company success: {company_name}")
+    print(f"Insert company success: {number_of_company}: {company_name}")
+    number_of_company += 1
 
 
 def generate_data_for_one_city(city_name="ha_noi"):
@@ -82,6 +86,7 @@ def generate_data_for_one_city(city_name="ha_noi"):
 
         print("**********page complete**********: ", city_name, " ", page)
         page = page + 1  # tăng page để tăng vòng lặp
+    print("city done: ", city_name)
 
 
 list_city_name = ['tien-giang', 'hung-yen', 'ha-noi', 'tp-ho-chi-minh', 'ca-mau', 'dac-lac', 'nam-dinh', 'quang-ninh', 'dak-nong', 'da-nang', 'hai-duong', 'long-an', 'ben-tre', 'dong-thap', 'vinh-long', 'kien-giang', 'tra-vinh', 'soc-trang', 'bac-ninh', 'thanh-hoa', 'vung-tau', 'dong-nai', 'binh-duong', 'thai-nguyen', 'thai-binh', 'can-tho', 'nghe-an', 'hue', 'binh-phuoc', 'quang-nam', 'quang-ngai',
