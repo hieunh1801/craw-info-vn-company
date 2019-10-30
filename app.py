@@ -1,11 +1,8 @@
 # Example for multiple page in one city
 import requests
-import logging
 from threading import Thread
 import threading
 from connection_to_db import execute_query
-
-logging.basicConfig(filename='app.log', filemode='w')
 
 
 def split_name(full_name):
@@ -60,10 +57,10 @@ def insert_to_company(company):
     $$ '{lastname}'$$) ON CONFLICT (tax_number) DO NOTHING;
     """
     execute_query(query)
-    print(f"Insert company success: {city}: {company_name}")
 
 
 def generate_data_for_one_city(city_name="ha_noi"):
+    count_company = 1
     print("city name: ", city_name)
     page = 1
     while True:
@@ -80,23 +77,35 @@ def generate_data_for_one_city(city_name="ha_noi"):
         for company in list_data_sort_company:
             # với mỗi công ty ta lấy info và inserst vào db
             url_company_detail = f"""https://thongtindoanhnghiep.co/api/company/{company["MaSoThue"]}"""
-            if str(company["MaSoThue"]) == '1201514416':
-                return
             res = requests.get(url_company_detail)
             insert_to_company(company=res.json())
+            print(
+                f"""Insert company success: {company["TinhThanhTitle"]} - {count_company} - {company["Title"]}""")
+            count_company = count_company + 1
 
-        print("**********page complete**********: ", city_name, " ", page)
+        print("**********page complete**********: ",
+              city_name, " - ", count_company, " - ", page)
         page = page + 1  # tăng page để tăng vòng lặp
     print("city done: ", city_name)
 
 
-list_city_name1 = ['tien-giang', 'hung-yen', 'ha-noi', 'tp-ho-chi-minh', 'ca-mau', 'dac-lac', 'nam-dinh', 'quang-ninh', 'dak-nong', 'da-nang', 'hai-duong', 'long-an', 'ben-tre', 'dong-thap', 'vinh-long',
-                   'kien-giang', 'tra-vinh', 'soc-trang', 'bac-ninh', 'thanh-hoa', 'vung-tau', 'dong-nai', 'binh-duong', 'thai-nguyen', 'thai-binh', 'can-tho', 'nghe-an', 'hue', 'binh-phuoc', 'quang-nam', 'quang-ngai']
-list_city_name2 = ['ninh-thuan', 'lao-cai', 'hai-phong', 'an-giang', 'phu-tho', 'tay-ninh', 'khanh-hoa', 'phu-yen', 'hoa-binh', 'tuyen-quang', 'lai-chau', 'hau-giang', 'lam-dong', 'lang-son', 'ha-nam', 'bac-can',
-                   'binh-dinh', 'cao-bang', 'son-la', 'quang-binh', 'quang-tri', 'gia-lai', 'bac-giang', 'ha-tinh', 'ninh-binh', 'binh-thuan', 'kon-tum', 'vinh-phuc', 'bac-lieu', 'yen-bai', 'dien-bien', 'ha-giang', 'chua-ro']
-list_city_name3 = []
-list_city_name4 = []
-list_city_name5 = []
+list_city_name = [
+    'tien-giang', 'hung-yen', 'ha-noi', 'tp-ho-chi-minh', 'ca-mau', 'dac-lac', 'nam-dinh', 'quang-ninh', 'dak-nong', 'da-nang', 'hai-duong', 'long-an',
+    'ben-tre', 'dong-thap', 'vinh-long', 'kien-giang', 'tra-vinh', 'soc-trang', 'bac-ninh', 'thanh-hoa', 'vung-tau', 'dong-nai', 'binh-duong', 'thai-nguyen',
+    'thai-binh', 'can-tho', 'nghe-an', 'hue', 'binh-phuoc', 'quang-nam', 'quang-ngai', 'ninh-thuan', 'lao-cai', 'hai-phong', 'an-giang', 'phu-tho',
+    'tay-ninh', 'khanh-hoa', 'phu-yen', 'hoa-binh', 'tuyen-quang', 'lai-chau', 'hau-giang', 'lam-dong', 'lang-son', 'ha-nam', 'bac-can', 'binh-dinh',
+    'cao-bang', 'son-la', 'quang-binh', 'quang-tri', 'gia-lai', 'bac-giang', 'ha-tinh', 'ninh-binh', 'binh-thuan', 'kon-tum', 'vinh-phuc', 'bac-lieu', 'yen-bai', 'dien-bien', 'ha-giang', 'chua-ro'
+]
+list_city_name1 = ['tien-giang', 'hung-yen', 'ha-noi', 'tp-ho-chi-minh', 'ca-mau',
+                   'dac-lac', 'nam-dinh', 'quang-ninh', 'dak-nong', 'da-nang', 'hai-duong', 'long-an']
+list_city_name2 = ['ben-tre', 'dong-thap', 'vinh-long', 'kien-giang', 'tra-vinh',
+                   'soc-trang', 'bac-ninh', 'thanh-hoa', 'vung-tau', 'dong-nai', 'binh-duong', 'thai-nguyen']
+list_city_name3 = ['thai-binh', 'can-tho', 'nghe-an', 'hue', 'binh-phuoc', 'quang-nam',
+                   'quang-ngai', 'ninh-thuan', 'lao-cai', 'hai-phong', 'an-giang', 'phu-tho']
+list_city_name4 = ['tay-ninh', 'khanh-hoa', 'phu-yen', 'hoa-binh', 'tuyen-quang',
+                   'lai-chau', 'hau-giang', 'lam-dong', 'lang-son', 'ha-nam', 'bac-can', 'binh-dinh']
+list_city_name5 = ['cao-bang', 'son-la', 'quang-binh', 'quang-tri', 'gia-lai', 'bac-giang', 'ha-tinh',
+                   'ninh-binh', 'binh-thuan', 'kon-tum', 'vinh-phuc', 'bac-lieu', 'yen-bai', 'dien-bien', 'ha-giang', 'chua-ro']
 
 
 def generate_from_list_city(cities):
@@ -124,8 +133,8 @@ if __name__ == "__main__":
             target=generate_from_list_city, args=(list_city_name5,))
         thread1.start()
         thread2.start()
-        # thread3.start()
-        # thread4.start()
-        # thread5.start()
+        thread3.start()
+        thread4.start()
+        thread5.start()
     except:
         print("error")

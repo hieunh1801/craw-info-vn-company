@@ -1,11 +1,8 @@
 # Example for multiple page in one city
 import requests
-import logging
+from threading import Thread
+import threading
 from connection_to_db import execute_query
-
-logging.basicConfig(filename='app.log', filemode='w')
-
-number_of_company = 1
 
 
 def split_name(full_name):
@@ -15,6 +12,7 @@ def split_name(full_name):
             - "Nguyễn Hữu Hiếu" -> ('Nguyeenx', 'Hữu', 'Hiếu')
             - "Nguyeenx Hữu"    -> ('Nguyeenx', '', 'Hữu')
             - "Nguyeenx"        -> ('', '', 'Nguyeenx')
+
     """
     if full_name is '' or None:
         return ('', '', '')
@@ -26,7 +24,6 @@ def split_name(full_name):
 
 
 def insert_to_company(company):
-    global number_of_company
     # print(company)
     company_name = company["Title"]
     registered_address = company["NoiDangKyQuanLy_CoQuanTitle"]
@@ -43,10 +40,10 @@ def insert_to_company(company):
     query = f"""
     INSERT INTO public.company_info(
             company_name, url, registered_address, company_address, owner_name, occupation, tax_number, city, district, ward, full_name, surname, middlename, lastname)
-    VALUES ( 
+    VALUES (
     $$ '{company_name}'$$,
     $$ '{url}'$$,
-    $$ '{registered_address}'$$, 
+    $$ '{registered_address}'$$,
     $$ '{company_address}'$$,
     $$ '{owner_name}'$$,
     $$ '{occupation}'$$,
@@ -60,11 +57,11 @@ def insert_to_company(company):
     $$ '{lastname}'$$) ON CONFLICT (tax_number) DO NOTHING;
     """
     execute_query(query)
-    print(f"Insert company success: {number_of_company}: {company_name}")
-    number_of_company += 1
 
 
 def generate_data_for_one_city(city_name="ha_noi"):
+    count_company = 1
+    print("city name: ", city_name)
     page = 1
     while True:
         url = f"https://thongtindoanhnghiep.co/api/company?l={city_name}&&r=100&&p={page}"
@@ -82,8 +79,12 @@ def generate_data_for_one_city(city_name="ha_noi"):
             url_company_detail = f"""https://thongtindoanhnghiep.co/api/company/{company["MaSoThue"]}"""
             res = requests.get(url_company_detail)
             insert_to_company(company=res.json())
+            print(
+                f"""Insert company success: {company["TinhThanhTitle"]} - {count_company} - {company["Title"]}""")
+            count_company = count_company + 1
 
-        print("**********page complete**********: ", city_name, " ", page)
+        print("**********page complete**********: ",
+              city_name, " - ", count_company, " - ", page)
         page = page + 1  # tăng page để tăng vòng lặp
     print("city done: ", city_name)
 
@@ -95,7 +96,44 @@ list_city_name = [
     'tay-ninh', 'khanh-hoa', 'phu-yen', 'hoa-binh', 'tuyen-quang', 'lai-chau', 'hau-giang', 'lam-dong', 'lang-son', 'ha-nam', 'bac-can', 'binh-dinh',
     'cao-bang', 'son-la', 'quang-binh', 'quang-tri', 'gia-lai', 'bac-giang', 'ha-tinh', 'ninh-binh', 'binh-thuan', 'kon-tum', 'vinh-phuc', 'bac-lieu', 'yen-bai', 'dien-bien', 'ha-giang', 'chua-ro'
 ]
+list_city_name1 = ['tien-giang', 'hung-yen', 'ha-noi', 'tp-ho-chi-minh', 'ca-mau', 'thai-binh', 'can-tho', 'nghe-an', 'hue', 'binh-phuoc', 'quang-nam',
+                   'quang-ngai', 'ninh-thuan', 'lao-cai', 'hai-phong', 'an-giang', 'phu-tho', 'tay-ninh', 'khanh-hoa', 'phu-yen', 'hoa-binh', 'tuyen-quang',
+                   'dac-lac', 'nam-dinh', 'quang-ninh', 'dak-nong', 'da-nang', 'hai-duong', 'long-an']
+list_city_name2 = ['ben-tre', 'dong-thap', 'vinh-long', 'kien-giang', 'tra-vinh', 'lai-chau', 'hau-giang', 'lam-dong', 'lang-son', 'ha-nam', 'bac-can', 'binh-dinh',
+                   'soc-trang', 'bac-ninh', 'thanh-hoa', 'vung-tau', 'dong-nai', 'binh-duong', 'thai-nguyen', 'cao-bang', 'son-la', 'quang-binh', 'quang-tri', 'gia-lai', 'bac-giang', 'ha-tinh',
+                   'ninh-binh', 'binh-thuan', 'kon-tum', 'vinh-phuc', 'bac-lieu', 'yen-bai', 'dien-bien', 'ha-giang', 'chua-ro']
+list_city_name3 = []
+list_city_name4 = []
+list_city_name5 = []
+
+
+def generate_from_list_city(cities):
+    """
+        Sử dụng để chạy đa luồng
+        - Lấy ra dữ liệu từ mảng các thành phố
+    """
+    for city in cities:
+        generate_data_for_one_city(city_name=city)
+
 
 if __name__ == "__main__":
-    for city in list_city_name:
-        generate_data_for_one_city(city_name=city)
+    try:
+        print("list 1:", len(list_city_name1),
+              " - list 2:", len(list_city_name2))
+        thread1 = threading.Thread(
+            target=generate_from_list_city, args=(list_city_name1,))
+        thread2 = threading.Thread(
+            target=generate_from_list_city, args=(list_city_name2,))
+        thread3 = threading.Thread(
+            target=generate_from_list_city, args=(list_city_name3,))
+        thread4 = threading.Thread(
+            target=generate_from_list_city, args=(list_city_name4,))
+        thread5 = threading.Thread(
+            target=generate_from_list_city, args=(list_city_name5,))
+        thread1.start()
+        thread2.start()
+        # thread3.start()
+        # thread4.start()
+        # thread5.start()
+    except:
+        print("error")
