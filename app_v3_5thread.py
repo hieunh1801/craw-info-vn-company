@@ -56,7 +56,7 @@ def insert_to_company(company):
     $$ '{middlename}'$$,
     $$ '{lastname}'$$) ON CONFLICT (tax_number) DO NOTHING;
     """
-    execute_query(query)
+    # execute_query(query)
 
 
 def generate_data_for_one_city(city_name="ha_noi"):
